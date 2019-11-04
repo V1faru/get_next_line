@@ -6,7 +6,7 @@
 /*   By: amurtone <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 09:53:04 by amurtone          #+#    #+#             */
-/*   Updated: 2019/11/04 13:36:21 by amurtone         ###   ########.fr       */
+/*   Updated: 2019/11/04 15:32:25 by amurtone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int		get_next(char *path)
 			return (1);
 		}
 		ft_putendl(line);
+		free(line);
 	}
 	if (close(fd) == -1)
 	{
