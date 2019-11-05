@@ -6,11 +6,23 @@
 /*   By: amurtone <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/29 15:38:18 by amurtone          #+#    #+#             */
-/*   Updated: 2019/11/04 15:28:30 by amurtone         ###   ########.fr       */
+/*   Updated: 2019/11/05 10:19:53 by amurtone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+/*
+** This function appends a single line into our line variable. We do this by
+** finding the length of the line. If at index len, the character is a newline,
+** we save the string into line up to the length found. Then we readjust the
+** stored data (**s) by creating a temporary string that stored the rest of data
+** after the newline. We free the stored data to update it to the current
+** address because we already append a line from it. This is done by freeing *s
+** and setting it equal to the temporary string that stored the remaining data.
+** At any point when we reach the end of the file, we free the memory used to
+** track our location in *s because it is not needed anymore.
+*/
 
 static int		get_line(char **str, char **line, const int fd)
 {
@@ -36,6 +48,22 @@ static int		get_line(char **str, char **line, const int fd)
 	}
 	return (1);
 }
+
+/*
+** The get_next_line function reads a file and returns the line ending with a
+** newline character from a file descriptor. A static variable is used, so that
+** whenever get_next_line is called, it remembers the previous function call.
+** When get_next_line is first called, we check to see if our static variable
+** **s is empty. If it is, we allocate memory for it using our buff string.
+** In the loop, we will continue to read more of the line and join them together
+** using a temporary string. This temporary string will replace the stored data
+** each iteration so that we can keep track of how much is read and delete
+** the previous stored data. This is needed because we are only reading so many
+** n-bytes at a time decided by our BUFF_SIZE. If we read at each iteration
+** without freeing memory, then we would have memory leaks. The loop breaks when
+** a newline is encountered. Finally, we call output function to check what
+** should be returned.
+*/
 
 int				get_next_line(const int fd, char **line)
 {
