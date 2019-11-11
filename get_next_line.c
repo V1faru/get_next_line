@@ -6,7 +6,7 @@
 /*   By: amurtone <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/29 15:38:18 by amurtone          #+#    #+#             */
-/*   Updated: 2019/11/05 14:13:25 by amurtone         ###   ########.fr       */
+/*   Updated: 2019/11/11 16:00:22 by amurtone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,19 @@ static int		get_line(char **str, char **line, const int fd)
 		i++;
 	if (str[fd][i] == '\n')
 	{
-		*line = ft_strsub(str[fd], 0, i);
-		tmp = ft_strdup(str[fd] + (i + 1));
+		if (!(*line = ft_strsub(str[fd], 0, i)))
+			return (-1);
+		if (!(tmp = ft_strdup(str[fd] + i + 1)))
+			return (-1);
 		free(str[fd]);
 		str[fd] = tmp;
 		if (str[fd][0] == '\0')
-			ft_strdel(str);
+			ft_strdel(&str[fd]);
 	}
 	else
 	{
-		*line = ft_strdup(str[fd]);
-		ft_strdel(str);
+		if (!(*line = ft_strdup(str[fd])))
+		ft_strdel(&str[fd]);
 	}
 	return (1);
 }
@@ -78,8 +80,10 @@ int				get_next_line(const int fd, char **line)
 	{
 		buf[ret] = '\0';
 		if (str[fd] == NULL)
-			str[fd] = ft_strnew(1);
-		tmp = ft_strjoin(str[fd], buf);
+			if (!(str[fd] = ft_strnew(1)))
+				return (-1);
+		if (!(tmp = ft_strjoin(str[fd], buf)))
+			return (-1);
 		free(str[fd]);
 		str[fd] = tmp;
 		if (ft_strchr(str[fd], '\n'))
